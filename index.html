@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Writen by Per-Henrik Kvalnes - Intern IT Nordlandssykehuset 2015 -->
+  <meta charset="UTF-8"></meta>
+  <style>
+    input{margin:5px; margin-right:10px;}
+    td{padding:5px; vertical-algin:top;}
+   </style>
+ </head>
+
+ <body>
+   <h1>Storyline / TinCan URL generator</h1>
+   <p>NB: fungerer bare i Chrome, Firefox, Safari eller Edge</p>
+   <p>Utviklet av Per-Henrik Kvalnes - Intern IT - Nordlandssykehuset</p>
+
+   <input id="ress_adress" /><span>E-læringsressurs adresse</span><br/>
+   <input id="lrs_adress" /><span>LRS adressse</span><br/>
+   <input id="lrs_username" /><span>LRS brukernavn</span><br/>
+   <input id="lrs_pwd" /><span>LRS nøkkel</span><br/>
+   <hr/>
+   <input id="name" /><span>Aktør navn (fornavn + etternavn)</span><br/>
+   <input id="email" type="email" /><span>Aktør epost</span><br/>
+   </br>
+   <input type="button" value="Generer lenke" onclick="generateURL()"></input>
+   <div id="output">
+   </div>
+   <br/><br/>
+   <div>
+     <p>Websiden genererer en url som sender læringsaktivitet fra e-læring laget i storyline e-læringen til 
+       et Learning Record Store. Storyline prosjektet må være eksport som 'TinCan' for at disse lenkene
+       skal fungere. </p>
+     <table>
+       <tr>
+	 <td>E-læringsressurs adresse</td>
+	 <td>Adressen til hvor kurset ligger på internett (eller lokalt)
+	 Må inneholde http:// ....</td>
+       </tr>
+
+       <tr>
+	 <td>LRS adresse</td>
+	 <td>Adressen til LRSet, den må inneholde en slash på slutten.
+	   Denne finner du som oftes inne i LRSet
+	   Eksempel: <pre>http://lrs/data/xAPI/</pre></td>
+       </tr>
+       <tr>
+	 <td>LRS brukernavn</td>
+	 <td>Brukernavnet til e-læringen til LRS (gis av LRS)</td>
+       </tr>
+       <tr>
+	 <td>LRS passord</td>
+	 <td>passord til e-læringen til LRS (gis av LRS)</td>
+       </tr>
+       <tr>
+	 <td>Navn / Epost</td>
+	 <td>Navn på personen du generer lenken for og epost.</td>
+       </tr>
+
+    </table>
+  </div>
+</body>
+
+<script>
+  
+  // generate an url for using TinCan / LRS with storyline
+  function generateURL()
+  {
+     output = document.getElementById("output");
+
+     var ress_adress = document.getElementById("ress_adress").value;
+     var lrs_adress = document.getElementById("lrs_adress").value;
+
+     var lrs_username = document.getElementById("lrs_username").value;
+     var lrs_pwd = document.getElementById("lrs_pwd").value;
+     var lrs_hash = window.btoa(lrs_username+":"+lrs_pwd);
+     
+     var useremail = document.getElementById("email").value;
+     var name = document.getElementById("name").value;
+     var actor = {"mbox":"mailto:"+useremail, "name":name}
+
+
+     // build the base of the url 
+     url = ress_adress
+
+     url += "?";
+     url += "endpoint="+ encodeURIComponent(lrs_adress);
+     url += "&auth="+ encodeURIComponent("Basic "+lrs_hash);
+     url += "&actor="+ encodeURIComponent(JSON.stringify(actor));
+     url += "&activity_id="+ encodeURIComponent("www.example.com/completed");
+     url += "&ampregistration="+encodeURIComponent("2981c910-6445-11e4-9803-0800200c9a66");
+     output.innerHTML = url;
+  }
+</script>
+</html>
