@@ -3,6 +3,7 @@
 <head>
   <!-- Writen by Per-Henrik Kvalnes - Intern IT Nordlandssykehuset 2015 -->
   <meta charset="UTF-8"></meta>
+  <script src="TincanUrlTool.js"></script>
   <style>
     input{margin:5px; margin-right:10px;}
     td{padding:5px; vertical-algin:top;}
@@ -22,7 +23,7 @@
    <input id="name" /><span>Aktør navn (fornavn + etternavn)</span><br/>
    <input id="email" type="email" /><span>Aktør epost</span><br/>
    </br>
-   <input type="button" value="Generer lenke" onclick="generateURL()"></input>
+   <input type="button" value="Generer lenke" onclick="submit()"></input>
    <div id="output">
    </div>
    <br/><br/>
@@ -63,32 +64,19 @@
 <script>
   
   // generate an url for using TinCan / LRS with storyline
-  function generateURL()
+  function submit()
   {
-     output = document.getElementById("output");
+  output = document.getElementById("output");
+  var ress_adress = document.getElementById("ress_adress").value;
+  var lrs_adress = document.getElementById("lrs_adress").value;
+  var lrs_username = document.getElementById("lrs_username").value;
+  var lrs_pwd = document.getElementById("lrs_pwd").value;
 
-     var ress_adress = document.getElementById("ress_adress").value;
-     var lrs_adress = document.getElementById("lrs_adress").value;
+  var useremail = document.getElementById("email").value;
+  var name = document.getElementById("name").value;
 
-     var lrs_username = document.getElementById("lrs_username").value;
-     var lrs_pwd = document.getElementById("lrs_pwd").value;
-     var lrs_hash = window.btoa(lrs_username+":"+lrs_pwd);
-     
-     var useremail = document.getElementById("email").value;
-     var name = document.getElementById("name").value;
-     var actor = {"mbox":"mailto:"+useremail, "name":name}
-
-
-     // build the base of the url 
-     url = ress_adress
-
-     url += "?";
-     url += "endpoint="+ encodeURIComponent(lrs_adress);
-     url += "&auth="+ encodeURIComponent("Basic "+lrs_hash);
-     url += "&actor="+ encodeURIComponent(JSON.stringify(actor));
-     url += "&activity_id="+ encodeURIComponent("www.example.com/completed");
-     url += "&ampregistration="+encodeURIComponent("2981c910-6445-11e4-9803-0800200c9a66");
-     output.innerHTML = url;
+  url = generateTinCanURL(ress_adress, lrs_adress, lrs_username, lrs_pwd, useremail, name);
+  output.innerHTML = url;
   }
 </script>
 </html>
