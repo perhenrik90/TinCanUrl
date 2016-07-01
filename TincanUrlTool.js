@@ -35,11 +35,12 @@ function generateTinCanURL(ress_adress, lrs_adress, lrs_username, lrs_pwd, usere
     url = ress_adress
 
     url += "?";
-    url += "endpoint="+ encodeURIComponent(lrs_adress);
+    url += "tincan=true";
+    url += "&endpoint="+ encodeURIComponent(lrs_adress);
     url += "&auth="+ encodeURIComponent("Basic "+lrs_hash);
     url += "&actor="+ encodeURIComponent(JSON.stringify(actor));
     url += "&activity_id="+ encodeURIComponent("www.example.com/completed");
-    url += "&ampregistration="+encodeURIComponent("2981c910-6445-11e4-9803-0800200c9a66");
+    url += "&ampregistration="+encodeURIComponent("2981c910-6445-11e4-9803-0800200c9a67");
 
     return url
 }
